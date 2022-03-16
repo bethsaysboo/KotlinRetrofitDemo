@@ -1,0 +1,96 @@
+package android.example.kotlinretrofitdemo
+
+import android.view.KeyEvent
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.rule.ActivityTestRule
+import junit.framework.TestCase
+import org.junit.Rule
+import org.junit.Test
+import java.util.regex.Pattern.matches
+
+class MainActivityTest : TestCase() {
+    @Rule
+    @JvmField
+
+    //use instead of ActivityTestRule (deprecated)
+      public var activityRule = ActivityScenarioRule(MainActivity::class.java);
+    //public var activityRule = ActivityTestRule(MainActivity::class.java);
+
+    //@Before
+    public override fun setUp() {
+        super.setUp()
+
+
+    }
+
+    @Test
+    fun recyclerViewTest(){
+
+        //test if recyclerview appears
+        Espresso.onView(withId(R.id.recyclerview_users)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(2, click()))
+
+     //test scrolling
+       var recyclerView : RecyclerView= activityRule.activity.findViewById(R.id.recyclerview_users)
+        var itemcount= recyclerView.adapter?.itemCount
+        if (itemcount!= null){
+            Espresso.onView(withId(R.id.recyclerview_users)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(itemcount.minus(1)))
+        }
+
+        //get item values by name or position (figure out how to get data)
+    /*
+        Espresso.onView(ViewMatchers.withId(R.id.recyclerview_users)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(5,click()))
+    val nameitem: String ="The data"
+        Espresso.onView(withText(nameitem)).check(matches(isDisplayed()))
+
+    */
+
+    }
+
+
+    fun ButtonTest(){
+        //all the buttons basically follow this.
+        onView(withId(R.id.buy_product_btn)).perform(click())
+
+    }
+
+    @Test
+    //search bar tests (values will be reassigned when merged
+    fun SearchBarTest() {
+
+        //open search view
+        onView(withId(R.id.search_bar)).perform(click())
+
+
+        //inserts quarry to test search bar
+
+        //text was input
+        onView(withId(R.id.search_bar_text)).perform(typeText("Replace this text"))
+        //starting the object search
+        onView(withId(R.id.search_bar)).perform(pressKey(KeyEvent.KEYCODE_ENTER))
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //@After
+    public override fun tearDown() {}
+}
